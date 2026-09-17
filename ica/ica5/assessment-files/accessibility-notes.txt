@@ -1,0 +1,23 @@
+Accessibility challenge notes
+
+Color:
+The original main content used dark text (#2a2a2a) on green (#008000), which has insufficient contrast for normal text (about 3.1:1, below WCAG AA's 4.5:1 requirement). The content background has been changed to white, giving approximately 14.4:1 contrast with #2a2a2a.
+
+Semantic HTML / screen reader navigation:
+The original page relied on <font> elements and <br> tags rather than headings and paragraphs, so screen reader heading navigation did not expose the document structure well. It now uses h1/h2/h3 headings and paragraph elements. The navigation wrapper was changed from <div class="nav"> to <nav>.
+
+Images:
+Both content images now include descriptive alt text.
+
+Forms:
+The search input now has a visually hidden <label> that is available to screen readers. The comment form's visible labels now use <label for="..."> associated with matching input ids.
+
+Show/hide comments:
+The div control was replaced by a native <button>, making it keyboard focusable and activatable with Enter/Space. aria-expanded and aria-controls communicate its state and target.
+
+Table:
+The table now includes a caption, column headers using <th scope="col">, and row headers using <th scope="row">.
+
+Two additional accessibility improvements:
+1. Added visible keyboard focus indicators for links, buttons, and form controls.
+2. Added a page language declaration and viewport metadata; an audio transcript would be another useful improvement if a transcript of the recording is available.
