@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Chaos Chronicles | Silly Story Generator</title>
+  <style>
+    :root { color-scheme: dark; --bg:#101020; --panel:#20203b; --text:#f5f4ff; --muted:#bbb9d4; --accent:#b99aff; --pink:#ff8cb8; }
+    * { box-sizing: border-box; }
+    body { margin:0; min-height:100vh; font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; background: radial-gradient(circle at top left,#34305b 0,transparent 45%),linear-gradient(135deg,#101020,#17152e); color:var(--text); padding:48px 18px; }
+    main { max-width:760px; margin:0 auto; }
+    header { text-align:center; margin-bottom:30px; }
+    .eyebrow { color:var(--pink); letter-spacing:.22em; font-size:.8rem; font-weight:800; text-transform:uppercase; }
+    h1 { font-size:clamp(2.2rem,6vw,4rem); line-height:1.08; margin:12px 0; letter-spacing:-.045em; }
+    header p { color:var(--muted); line-height:1.6; }
+    .panel { background:var(--panel); border:1px solid #454166; border-radius:22px; padding:clamp(22px,5vw,36px); box-shadow:0 18px 45px #0005; }
+    label, legend { font-weight:700; font-size:.95rem; }
+    label { display:block; margin-bottom:10px; }
+    input[type="text"] { width:100%; padding:14px 16px; border:2px solid #585274; border-radius:12px; background:#121225; color:white; font:inherit; outline:none; }
+    input[type="text"]:focus-visible { border-color:var(--accent); box-shadow:0 0 0 3px #b99aff33; }
+    fieldset { border:0; padding:0; margin:24px 0; }
+    legend { margin-bottom:12px; }
+    .radio-options { display:flex; gap:12px; flex-wrap:wrap; }
+    .radio-options label { display:flex; align-items:center; gap:9px; background:#302d4e; border:1px solid #5b5578; border-radius:12px; padding:11px 16px; margin:0; cursor:pointer; }
+    input[type="radio"] { accent-color:var(--accent); width:17px; height:17px; }
+    button { width:100%; border:0; border-radius:12px; background:linear-gradient(100deg,var(--accent),var(--pink)); color:#181225; font:800 1rem inherit; font-family:inherit; font-size:1.05rem; font-weight:800; padding:16px; cursor:pointer; transition:transform .15s,filter .15s; }
+    button:hover { filter:brightness(1.08); transform:translateY(-2px); }
+    button:focus-visible { outline:3px solid white; outline-offset:3px; }
+    .story { margin-top:26px; padding:24px; border-radius:16px; background:#302847; border-left:5px solid var(--pink); line-height:1.85; font-size:1.08rem; white-space:pre-line; }
+    .story[hidden] { display:none; }
+    footer { color:var(--muted); font-size:.85rem; text-align:center; margin-top:24px; }
+    @media(max-width:480px) { body {padding:28px 14px;} .radio-options {flex-direction:column;} }
+  </style>
+</head>
+<body>
+  <main>
+    <header>
+      <p>Type in a name, choose your units, and generate a ridiculous story.</p>
+    </header>
+    <section class="panel" aria-label="Story generator">
+      <label for="customname">Who's the main character? (optional)</label>
+      <input id="customname" type="text" placeholder="e.g. Captain Noodle" maxlength="60">
+      <fieldset>
+        <legend>Choose your measurement style</legend>
+        <div class="radio-options">
+          <label for="us"><input id="us" type="radio" name="units" value="us" checked> US (pounds / °F)</label>
+          <label for="uk"><input id="uk" type="radio" name="units" value="uk"> UK (stone / °C)</label>
+        </div>
+      </fieldset>
+      <button class="randomize" type="button">Generate My Chaos</button>
+      <p class="story" aria-live="polite" hidden></p>
+    </section>
+  </main>
+  <script>
+    const customName = document.querySelector('#customname');
+    const randomize = document.querySelector('.randomize');
+    const story = document.querySelector('.story');
+
+    function randomValueFromArray(array) {
+      return array[Math.floor(Math.random() * array.length)];
+    }
+
+    const characters = ['Professor Pickles', 'DJ Broccoli', 'Sir Waffles', 'the neighborhood raccoon', 'a suspiciously intelligent pigeon'];
+    const places = ['the grocery store', 'a haunted bowling alley', 'the school cafeteria', 'an underground disco', 'a very serious town meeting'];
+    const incidents = [
+      'challenged everyone to a dance battle and immediately pulled a hamstring',
+      'accidentally launched 300 rubber ducks into the air',
+      'declared themselves the ruler of all parking lots',
+      'started a food fight using only mashed potatoes',
+      'tried to sell invisible sneakers for a thousand dollars'
+    ];
+    const endings = [
+      'The police arrived, but they were too busy laughing to write a report.',
+      'Someone uploaded the footage, and it got two million views before lunch.',
+      'The mayor called it a disaster. The internet called it legendary.',
+      'Nobody spoke about it again, except at every family dinner forever.',
+      'A random stranger yelled, "That was the dumbest thing I have ever seen!"'
+    ];
+
+    function result() {
+      const name = customName.value.trim() || 'Captain Noodle';
+      const character = randomValueFromArray(characters);
+      const place = randomValueFromArray(places);
+      const incident = randomValueFromArray(incidents);
+      const ending = randomValueFromArray(endings);
+      let temperature = '94°F';
+      let weight = '300 pounds';
+      if (document.querySelector('#uk').checked) {
+        temperature = `${Math.round((94 - 32) * 5 / 9)}°C`;
+        weight = `${(300 / 14).toFixed(1)} stone`;
+      }
+      story.textContent = `It was a scorching ${temperature} afternoon when ${name} walked into ${place} expecting a perfectly normal day. That plan lasted about six seconds.\n\nOut of nowhere, ${character} appeared carrying a mysterious suitcase weighing ${weight}. Without any warning, ${character} ${incident}.\n\n${name} stood there in complete disbelief. "You have GOT to be kidding me," they muttered, as the entire room erupted into chaos.\n\n${ending} And that is why ${name} is no longer allowed to make plans on Tuesdays.`;
+      story.hidden = false;
+    }
+
+    randomize.addEventListener('click', result);
+  </script>
+</body>
+</html>
